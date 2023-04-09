@@ -72,25 +72,24 @@ const MiniImdb = () => {
     setInputDescription('')
     setInputImage('')
   }
-
-  const sortMovies = event => {
-    setSortBy(event.target.value)
-    if (sortBy === 'titleAscending') {
-      taskList.sort((a, b) => a.title.localeCompare(b.title))
-    } else if (sortBy === 'titleDescending') {
-      taskList.sort((a, b) => b.title.localeCompare(a.title))
-    } else if (sortBy === 'ratingAscending') {
-      taskList.sort((a, b) => a.rate - b.rate)
-    } else if (sortBy === 'ratingDescending') {
-      taskList.sort((a, b) => b.rate - a.rate)
+  const sortMovies = sort => {
+    if (sort === 'titleAscending') {
+      taskList.sort((a, b) => a.inputTitle.localeCompare(b.inputTitle))
+    } else if (sort === 'titleDescending') {
+      taskList.sort((a, b) => b.inputTitle.localeCompare(a.inputTitle))
+    } else if (sort === 'ratingAscending') {
+      taskList.sort((a, b) => a.rating - b.rating)
+    } else if (sort === 'ratingDescending') {
+      taskList.sort((a, b) => b.rating - a.rating)
     }
-
     setTaskList(taskList)
   }
-  /* const handleDropdownChange = event => {
-    setSortBy(event.target.value)
-    sortMovies(sortBy)
-  } */
+
+  const handleDropdownChange = event => {
+    const sort = event.target.value
+    setSortBy(sort)
+    sortMovies(sort)
+  }
 
   useEffect(() => {
     const taskLists = JSON.parse(localStorage.getItem('taskList'))
@@ -140,8 +139,9 @@ const MiniImdb = () => {
             id="sort-by"
             name="sort-by"
             value={sortBy}
-            onChange={sortMovies}
+            onChange={handleDropdownChange}
           >
+            <option>Title</option>
             <option value="titleAscending">Title (A-Z)</option>
             <option value="titleDescending">Title (Z-A)</option>
           </select>
@@ -149,8 +149,9 @@ const MiniImdb = () => {
             id="sort-by"
             name="sort-by"
             value={sortBy}
-            onChange={sortMovies}
+            onChange={handleDropdownChange}
           >
+            <option>Rating</option>
             <option value="ratingAscending">Rating (Low to High)</option>
             <option value="ratingDescending">Rating (High to Low)</option>
           </select>
